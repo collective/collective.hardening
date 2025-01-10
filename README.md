@@ -10,6 +10,21 @@
 
 An addon for hardening Plone.
 
+The goal is to add features that will make your Plone site even more secure.
+
+## Features
+
+- Control which file types can be uploaded to the site.
+- TDB
+
+### Control which file types can be uploaded to the site
+
+The addon provides a control panel where you can define which file types can be uploaded to the site.
+
+The control panel is available at the path `/@@hardening-controlpanel`.
+
+The control panel will allow you to control which mimetypes or extensions can be uploaded to the site.
+
 ## Installation
 
 Install `collective.hardening` by adding it to your buildout, e.g.:

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<registry>
+  <records interface="collective.hardening.controlpanel.settings.IHardeningSettings"
+           prefix="collective.hardening.settings"
+           remove="true"
+  />
+</registry>
