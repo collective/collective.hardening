@@ -1,4 +1,4 @@
-* collective.pdbpp version:
+* collective.hardening version:
 * Plone Version:
 * Python version:
 * Operating System: Linux

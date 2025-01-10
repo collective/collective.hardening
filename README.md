@@ -8,38 +8,43 @@
 
 # collective.hardening
 
-An addon for hardening Plone.
-
-The goal is to add features that will make your Plone site even more secure.
+**collective.hardening** is an add-on designed to enhance Plone security by adding configurable features that help safeguard your site.
 
 ## Features
 
-- Control which file types can be uploaded to the site.
-- TDB
+- **Dedicated Control Panel** Easily configure security-related settings from one central location.
 
-### Control which file types can be uploaded to the site
+- **File Type Restrictions** Control which file types (by extension or MIME type) can be uploaded to your site.
 
-The addon provides a control panel where you can define which file types can be uploaded to the site.
+- **Additional Improvements (TDB)** Further enhancements are planned for upcoming releases.
 
-The control panel is available at the path `/@@hardening-controlpanel`.
+### Control Panel
 
-The control panel will allow you to control which mimetypes or extensions can be uploaded to the site.
+A new control panel, accessible at `/@@hardening-controlpanel`, allows you to fine-tune the add-on's security settings.
+Through this interface, you can define which file types are permissible and ensure that only safe files are uploaded to your Plone site.
+You can access the control panel under the **Security** section of the main Plone control panel.
+
+### File Type Management
+
+Using the control panel, you can specify disallowed MIME types or file extensions. This flexibility helps prevent the upload of potentially harmful files, bolstering your site's security.
 
 ## Installation
 
-Install `collective.hardening` by adding it to your buildout, e.g.:
+To install **collective.hardening**, add it to your buildout configuration as follows:
 
-    [instance]
-    eggs +=
-        collective.hardening
+```ini
+[instance]
+eggs +=
+    collective.hardening
+```
 
-and then running `bin/buildout`.
+After updating the configuration, run buildout:
 
-When your instance starts you can enter a pdb session by adding the path `pdb` to any URL, e.g.:
+```bash
+bin/buildout
+```
 
-- http://localhost:8080/pdb
-- http://localhost:8080/Plone/pdb
-
+And restart your Plone instance.
 
 ## Authors
 
@@ -53,10 +58,8 @@ Put your name here, you deserve it!
 
 ## Contribute
 
-- Issue Tracker:
-  <https://github.com/collective/collective.hardening/issues>
+- Issue Tracker: <https://github.com/collective/collective.hardening/issues>
 - Source Code: <https://github.com/collective/collective.hardening>
-- Documentation: <https://docs.plone.org/foo/bar>
 
 ## Support
 

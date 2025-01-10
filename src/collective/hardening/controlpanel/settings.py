@@ -6,6 +6,39 @@ from zope import schema
 from zope.interface import Interface
 
 
+def _default_mimetypes_deny_list():
+    """
+    Returns a set of mimetypes that should be denied for upload.
+    """
+    return {
+        "application/javascript",  # JavaScript files
+        "application/octet-stream",  # Generic binary files
+        "application/x-*",  # Catch-all for executables
+    }
+
+
+def _default_extensions_deny_list():
+    """
+    Returns a set of file extensions that should be denied for upload.
+    """
+    return {
+        "asp",  # Active Server Pages files
+        "aspx",  # Active Server Pages files
+        "bat",  # Batch script files
+        "cmd",  # Command script files
+        "com",  # DOS command files
+        "dll",  # Dynamic link library files
+        "exe",  # Executable files
+        "jar",  # Java archive files
+        "jsp",  # JavaServer Pages files
+        "msi",  # Windows installer files
+        "ps1",  # PowerShell scripts
+        "scr",  # Screensaver files (executable)
+        "sh",  # Shell script files
+        "vbs",  # VBScript files
+    }
+
+
 class IHardeningSettings(Interface):
     """Global settings for collective.hardening.
 
@@ -21,7 +54,7 @@ class IHardeningSettings(Interface):
         ),
         value_type=schema.TextLine(),
         required=False,
-        defaultFactory=set,
+        defaultFactory=_default_mimetypes_deny_list,
     )
 
     extensions_deny_list = schema.Set(
@@ -32,7 +65,7 @@ class IHardeningSettings(Interface):
         ),
         value_type=schema.TextLine(),
         required=False,
-        defaultFactory=set,
+        defaultFactory=_default_extensions_deny_list,
     )
 
 
