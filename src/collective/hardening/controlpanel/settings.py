@@ -1,5 +1,7 @@
 from collective.hardening import _
-from plone.app.registry.browser import controlpanel
+from plone.app.registry.browser.controlpanel import ControlPanelFormWrapper
+from plone.app.registry.browser.controlpanel import RegistryEditForm
+from plone.z3cform import layout
 from zope import schema
 from zope.interface import Interface
 
@@ -11,7 +13,7 @@ class IHardeningSettings(Interface):
     obtainable via plone.registry.
     """
 
-    mimetypes_deny_list = schema.List(
+    mimetypes_deny_list = schema.Set(
         title=_("label_mimetypes_deny_list", default="Denied Mimetypes"),
         description=_(
             "description_mimetypes_deny_list",
@@ -19,9 +21,10 @@ class IHardeningSettings(Interface):
         ),
         value_type=schema.TextLine(),
         required=False,
+        defaultFactory=set,
     )
 
-    extensions_deny_list = schema.List(
+    extensions_deny_list = schema.Set(
         title=_("label_extensions_deny_list", default="Denied Extensions"),
         description=_(
             "description_extensions_deny_list",
@@ -29,15 +32,15 @@ class IHardeningSettings(Interface):
         ),
         value_type=schema.TextLine(),
         required=False,
+        defaultFactory=set,
     )
 
 
-class HardeningEditForm(controlpanel.RegistryEditForm):
+class HardeningEditForm(RegistryEditForm):
     schema = IHardeningSettings
     schema_prefix = "collective.hardening.settings"
     label = _("Hardening settings")
     description = _("Control panel to setup the hardening settings for the site.")
 
 
-class HardeningControlPanel(controlpanel.ControlPanelFormWrapper):
-    form = HardeningEditForm
+HardeningControlPanel = layout.wrap_form(HardeningEditForm, ControlPanelFormWrapper)
