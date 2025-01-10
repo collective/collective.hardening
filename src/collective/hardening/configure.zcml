@@ -2,20 +2,19 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:five="http://namespaces.zope.org/five"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
     i18n_domain="undefined"
     >
+
+  <i18n:registerTranslations directory="locales" />
 
   <five:registerPackage
       package="."
       initialize=".initialize"
       />
 
-  <browser:page
-      name="pdb"
-      for="*"
-      class=".PdbView"
-      permission="zope.Public"
-      />
+  <include file="profiles.zcml" />
 
+  <include package=".subscribers" />
 
 </configure>

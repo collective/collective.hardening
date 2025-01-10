@@ -1,0 +1,9 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    i18n_domain="slc.deploymentmanager"
+    >
+
+  <subscriber handler=".files.validate_created" />
+  <subscriber handler=".files.validate_modified" />
+
+</configure>
