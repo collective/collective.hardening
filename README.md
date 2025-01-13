@@ -24,9 +24,14 @@ A new control panel, accessible at `/@@hardening-controlpanel`, allows you to fi
 Through this interface, you can define which file types are permissible and ensure that only safe files are uploaded to your Plone site.
 You can access the control panel under the **Security** section of the main Plone control panel.
 
-### File Type Management
+### File Type Restrictions
 
 Using the control panel, you can specify disallowed MIME types or file extensions. This flexibility helps prevent the upload of potentially harmful files, bolstering your site's security.
+
+The implementation is based on:
+
+1. Event subscribers active on created or modified objects.
+2. A widget validator that checks the file type on upload.
 
 ## Installation
 
@@ -48,7 +53,7 @@ And restart your Plone instance.
 
 ## Authors
 
-The [Syslab.com](https://www.syslab.com) Team.
+The [Syslab.com](https://www.syslab.com) team.
 
 ## Contributors
 

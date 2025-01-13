@@ -1,19 +1,25 @@
 from AccessControl.users import SpecialUser
 from collective.hardening import _
 from collective.hardening.controlpanel.settings import IHardeningSettings
+from collective.hardening.interfaces import ICollectiveHardeningLayer
 from fnmatch import fnmatch
 from functools import cached_property
 from logging import getLogger
 from plone import api
 from plone.dexterity.interfaces import IDexterityContent
+from plone.formwidget.namedfile.validator import NamedFileWidgetValidator
 from plone.memoize.view import memoize_contextless
+from plone.namedfile.interfaces import INamedField
 from plone.registry.interfaces import IRegistry
 from plone.rfc822.interfaces import IPrimaryFieldInfo
+from z3c.form import validator
+from z3c.form.interfaces import NOT_CHANGED
 from zExceptions import Forbidden
 from zope.component import adapter
 from zope.component import getUtility
 from zope.interface import implementer
 from zope.interface import Interface
+from zope.schema import ValidationError
 
 
 logger = getLogger(__name__)
@@ -26,11 +32,15 @@ class IValidateUpload(Interface):
         """Validate the primary field against the hardening settings."""
 
 
-@implementer(IValidateUpload)
-@adapter(IDexterityContent)
-class ValidateUpload:
-    def __init__(self, context):
-        self.context = context
+class DeniedExtensionValidationError(ValidationError):
+    """Uploading files with this extension is not allowed."""
+
+
+class DeniedMimetypeValidationError(ValidationError):
+    """Uploading files with this mimetype is not allowed."""
+
+
+class BaseUploadValidatorMixin:
 
     @property
     @memoize_contextless
@@ -40,6 +50,13 @@ class ValidateUpload:
         return registry.forInterface(
             IHardeningSettings, prefix="collective.hardening.settings", check=False
         )
+
+
+@implementer(IValidateUpload)
+@adapter(IDexterityContent)
+class ValidateUpload(BaseUploadValidatorMixin):
+    def __init__(self, context):
+        self.context = context
 
     @property
     @memoize_contextless
@@ -131,3 +148,65 @@ class ValidateUpload:
         if not self.primary_field:
             return True
         return self.validate_content_type() and self.validate_extension()
+
+
+class HardenedNamedFileWidgetValidator(
+    NamedFileWidgetValidator, BaseUploadValidatorMixin
+):
+
+    def validate_content_type(self, value):
+        """Check that the uploaded file content type is not in our deny list."""
+        if value is None:
+            return
+
+        content_type = value.contentType
+        if not content_type:
+            return
+
+        deny_list = self.settings.mimetypes_deny_list
+        if not deny_list:
+            return
+
+        for mimetype in deny_list:
+            if fnmatch(content_type, mimetype):
+                message = _(
+                    "error_denied_mimetype",
+                    default="Uploading files with the '${mimetype}' mimetype is not allowed.",
+                    mapping={"mimetype": mimetype},
+                )
+                raise DeniedMimetypeValidationError(message)
+
+    def validate_extension(self, value):
+        """Check that the uploaded file extension is not in our deny list."""
+        if value is None:
+            return
+
+        filename = value.filename
+        if not filename:
+            return
+
+        deny_list = self.settings.extensions_deny_list
+        if not deny_list:
+            return
+
+        for extension in deny_list:
+            if fnmatch(filename, f"*.{extension}"):
+                message = _(
+                    "error_denied_extension",
+                    default="Uploading files with the '${extension}' extension is not allowed.",
+                    mapping={"extension": extension.lower()},
+                )
+                raise DeniedExtensionValidationError(message)
+
+    def validate(self, value, force=False):
+        if value != NOT_CHANGED:
+            self.validate_content_type(value)
+            self.validate_extension(value)
+        return super().validate(value, force=force)
+
+
+validator.WidgetValidatorDiscriminators(
+    HardenedNamedFileWidgetValidator,
+    request=ICollectiveHardeningLayer,
+    field=INamedField,
+)

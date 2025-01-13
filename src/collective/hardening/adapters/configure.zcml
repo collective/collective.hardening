@@ -1,5 +1,6 @@
 <configure xmlns="http://namespaces.zope.org/zope">
 
   <adapter factory=".primary_field.ValidateUpload" />
+  <adapter factory=".primary_field.HardenedNamedFileWidgetValidator" />
 
 </configure>
