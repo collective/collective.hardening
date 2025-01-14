@@ -1,4 +1,4 @@
-[![image](https://github.com/collective/collective.hardening/actions/workflows/plone-package.yml/badge.svg)](https://github.com/collective/collective.hardening/actions/workflows/plone-package.yml)
+[![image](https://github.com/collective/collective.hardening/actions/workflows/plone-package.yml/badge.svg)](https://github.com/collective/collective.hardening/actions/workflows/meta.yml)
 [![Coveralls](https://coveralls.io/repos/github/collective/collective.hardening/badge.svg?branch=main)](https://coveralls.io/github/collective/collective.hardening?branch=main)
 [![image](https://codecov.io/gh/collective/collective.hardening/branch/master/graph/badge.svg)](https://codecov.io/gh/collective/collective.hardening)
 [![Latest Version](https://img.shields.io/pypi/v/collective.hardening.svg)](https://pypi.python.org/pypi/collective.hardening/)
