@@ -36,6 +36,9 @@ jobs:
     uses: plone/meta/.github/workflows/release_ready.yml@main
   circular:
     uses: plone/meta/.github/workflows/circular.yml@main
+    # XXX Disabled until plone.app.discussion is free from plone.api
+    #     see: https://github.com/plone/plone.app.discussion/pull/253
+    if: false
 
 ##
 # To modify the list of default jobs being created add in .meta.toml:
