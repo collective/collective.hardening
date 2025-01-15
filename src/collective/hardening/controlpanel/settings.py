@@ -4,6 +4,9 @@ from plone.app.registry.browser.controlpanel import RegistryEditForm
 from plone.z3cform import layout
 from zope import schema
 from zope.interface import Interface
+from zope.interface import implementer
+from z3c.form.object import registerFactoryAdapter
+from plone.registry.field import PersistentField
 
 
 def _default_mimetypes_deny_list():
@@ -39,6 +42,65 @@ def _default_extensions_deny_list():
     }
 
 
+class IStrictTransportSecurity(Interface):
+
+    enabled = schema.Bool(
+        title=_("label_enabled", default="Enabled"),
+        description=_(
+            "description_enabled",
+            default="Enable the Strict-Transport-Security header.",
+        ),
+        required=False,
+        default=False,
+    )
+
+    max_age = schema.Int(
+        title=_("label_max_age", default="Max Age"),
+        description=_(
+            "description_max_age",
+            default="The time in seconds that the browser should remember that this site is only to be accessed using HTTPS.",
+        ),
+        required=True,
+        min=0,
+        default=31536000,
+    )
+
+    include_subdomains = schema.Bool(
+        title=_("label_include_subdomains", default="Include Subdomains"),
+        description=_(
+            "description_include_subdomains",
+            default="If enabled, the rule applies to all of the site's subdomains as well.",
+        ),
+        required=False,
+        default=False,
+    )
+
+    preload = schema.Bool(
+        title=_("label_preload", default="Preload"),
+        description=_(
+            "description_preload",
+            default="If enabled, the site is included in the HSTS preload list.",
+        ),
+        required=False,
+        default=False,
+    )
+
+
+@implementer(IStrictTransportSecurity)
+class StrictTransportSecurity:
+
+    def __init__(self, enabled=False, max_age=31536000, include_subdomains=False, preload=False):
+        self.enabled = enabled
+        self.max_age = max_age
+        self.include_subdomains = include_subdomains
+        self.preload = preload
+
+
+registerFactoryAdapter(IStrictTransportSecurity, StrictTransportSecurity)
+
+class StrictTransportSecurityField(PersistentField, schema.Object):
+    pass
+
 class IHardeningSettings(Interface):
     """Global settings for collective.hardening.
 
@@ -68,6 +130,15 @@ class IHardeningSettings(Interface):
         defaultFactory=_default_extensions_deny_list,
     )
 
+    strict_transport_security = StrictTransportSecurityField(
+        title=_("label_strict_transport_security", default="Strict Transport Security"),
+        description=_(
+            "description_strict_transport_security",
+            default="Control the Strict-Transport-Security header settings.",
+        ),
+        schema=IStrictTransportSecurity,
+        required=False,
+    )
 
 class HardeningEditForm(RegistryEditForm):
     schema = IHardeningSettings
