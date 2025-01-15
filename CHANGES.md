@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.0.2 (unreleased)
+## 0.0.2 (2025-01-15)
 
 
 - Allow Python 3.8.
