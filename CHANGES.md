@@ -3,7 +3,8 @@
 ## 0.0.2 (unreleased)
 
 
-- Nothing changed yet.
+- Allow Python 3.8.
+  [ale-rt]
 
 
 ## 0.0.1 (2025-01-15)
