@@ -15,7 +15,7 @@ long_description = "\n\n".join(
 
 setup(
     name="collective.hardening",
-    version="0.0.2",
+    version="0.0.3.dev0",
     description="An addon for hardening Plone",
     long_description=long_description,
     long_description_content_type="text/markdown",
