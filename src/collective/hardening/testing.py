@@ -21,5 +21,5 @@ COLLECTIVE_HARDENING_FIXTURE = CollectiveHardeningLayer()
 
 COLLECTIVE_HARDENING_INTEGRATION_TESTING = IntegrationTesting(
     bases=(COLLECTIVE_HARDENING_FIXTURE,),
-    name="ExperimentalMetadataCheckerLayer:IntegrationTesting",
+    name="CollectiveHardeningLayer:IntegrationTesting",
 )
